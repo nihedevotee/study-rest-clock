@@ -1,0 +1,38 @@
+{
+  "name": "study-rest-clock",
+  "version": "3.0.0",
+  "description": "A minimal, always-on-top Study/Rest chess-clock. Runs as a web app (Vercel) or an Electron desktop overlay.",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "web": "npx serve web -p 5173",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.studyrestclock.app",
+    "productName": "Study Rest Clock",
+    "files": [
+      "electron/**/*",
+      "web/**/*",
+      "!web/node_modules"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

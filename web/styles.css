@@ -1,0 +1,521 @@
+/*
+  Study Rest Clock — shared stylesheet
+  -----------------------------------------------------------------------
+  Dark-mode-first, minimal, modeled loosely on a physical chess clock:
+  the active side reads like a pressed plunger (inset shadow + a thin
+  glowing top edge in that side's color), everything else stays quiet.
+  This file is used unmodified by both the web build and the Electron
+  desktop shell.
+*/
+
+:root {
+  color-scheme: dark;
+
+  --bg: #0b0d0c;
+  --bg-2: #101312;
+  --panel: #151816;
+  --panel-2: #1b1f1c;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.05);
+
+  --text: #eef1ee;
+  --muted: #8a9691;
+  --muted-2: #5f6b66;
+
+  --study: #4fb3a3;
+  --study-soft: rgba(79, 179, 163, 0.14);
+  --rest: #e0a458;
+  --rest-soft: rgba(224, 164, 88, 0.14);
+
+  --danger: #d97757;
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --font-display: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-body: -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body.is-web {
+  overflow: auto;
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+button,
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------------- */
+/* App shell                                                               */
+/* ---------------------------------------------------------------------- */
+
+.app-shell {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 8px;
+  padding: 10px;
+}
+
+body.is-web .app-shell {
+  height: auto;
+  min-height: 100vh;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 14px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Top bar                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+  -webkit-app-region: drag; /* Electron only: lets the frameless window be dragged from here */
+}
+
+.topbar .no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.brand .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted-2);
+  flex-shrink: 0;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+.brand.active-study .dot {
+  background: var(--study);
+  box-shadow: 0 0 8px var(--study-soft);
+}
+
+.brand.active-rest .dot {
+  background: var(--rest);
+  box-shadow: 0 0 8px var(--rest-soft);
+}
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.icon-btn:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+.icon-btn.is-on {
+  color: var(--study);
+  border-color: color-mix(in srgb, var(--study) 40%, var(--border));
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Board (the two chess-clock panels)                                     */
+/* ---------------------------------------------------------------------- */
+
+.board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  min-height: 0;
+}
+
+.side {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 6px;
+  padding: clamp(10px, 4%, 18px);
+  min-width: 0;
+  min-height: 0;
+  text-align: left;
+  position: relative;
+  transition: transform 120ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.side::after {
+  /* the "pressed plunger" top edge, only lit up when this side is active */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: transparent;
+  transition: background 160ms ease;
+}
+
+.side.study::after {
+  background: transparent;
+}
+
+.side.rest::after {
+  background: transparent;
+}
+
+.side.is-active.study::after {
+  background: var(--study);
+}
+
+.side.is-active.rest::after {
+  background: var(--rest);
+}
+
+.side.is-active {
+  background: var(--panel-2);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.side.is-active.is-running {
+  border-color: color-mix(in srgb, var(--study) 30%, var(--border));
+}
+
+.side.rest.is-active.is-running {
+  border-color: color-mix(in srgb, var(--rest) 30%, var(--border));
+}
+
+.side:not(.is-active):hover {
+  transform: translateY(-1px);
+}
+
+.side:active {
+  transform: translateY(1px) scale(0.995);
+}
+
+.side-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.side-label {
+  font-size: clamp(0.72rem, 2vw, 0.9rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.side.study .side-label {
+  color: var(--study);
+}
+
+.side.rest .side-label {
+  color: var(--rest);
+}
+
+.pill {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted-2);
+}
+
+.side.is-active.study .pill {
+  background: var(--study-soft);
+  color: var(--study);
+}
+
+.side.is-active.rest .pill {
+  background: var(--rest-soft);
+  color: var(--rest);
+}
+
+.time {
+  align-self: center;
+  justify-self: start;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 11vw, 4.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.side:not(.is-active) .time {
+  color: var(--muted);
+}
+
+.side-hint {
+  font-size: 0.68rem;
+  color: var(--muted-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Controls                                                                */
+/* ---------------------------------------------------------------------- */
+
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  flex: 1;
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  height: 38px;
+  font-weight: 650;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
+}
+
+.btn:hover {
+  background: var(--panel-2);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn.primary {
+  background: var(--text);
+  color: #0b0d0c;
+  border-color: transparent;
+}
+
+.btn.primary:hover {
+  opacity: 0.92;
+}
+
+.btn.ghost {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Settings drawer                                                        */
+/* ---------------------------------------------------------------------- */
+
+.settings-panel {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.settings-panel[hidden] {
+  display: none;
+}
+
+.settings-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.settings-head h2 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.settings-head .card-note {
+  font-size: 0.68rem;
+  color: var(--muted-2);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+}
+
+.field span,
+.slider-row span {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.field input[type="number"] {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  color: var(--text);
+  font: inherit;
+  font-family: var(--font-display);
+}
+
+.field input:focus,
+.toggle input:focus-visible,
+.slider-row input:focus-visible,
+.btn:focus-visible,
+.icon-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--study) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.toggles {
+  display: grid;
+  gap: 8px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--study);
+}
+
+.slider-row {
+  display: grid;
+  gap: 5px;
+}
+
+.slider-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--study);
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Toast                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: #0b0d0c;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  max-width: min(92vw, 420px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}
+
+.toast[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Small-window resilience                                                 */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 340px), (max-height: 260px) {
+  .side-hint {
+    display: none;
+  }
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

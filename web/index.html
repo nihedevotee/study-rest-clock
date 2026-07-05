@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0c" />
+    <meta name="description" content="A minimal chess-clock timer for alternating Study and Rest sessions." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon48.png" />
+    <link rel="apple-touch-icon" href="assets/icon128.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Study Rest Clock</title>
+  </head>
+  <body class="is-web">
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand" id="brand">
+          <span class="dot"></span>
+          <span id="statusText">Study Rest Clock</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="requestNotifyBtn" type="button" title="Enable notifications">🔔</button>
+          <button class="icon-btn" id="fullscreenBtn" type="button" title="Fullscreen">⛶</button>
+          <button class="icon-btn" id="settingsToggleBtn" type="button" title="Settings">⚙</button>
+        </div>
+      </header>
+
+      <section class="board" aria-label="Timer panels">
+        <button class="side study" id="studyPanel" type="button">
+          <div class="side-top">
+            <span class="side-label">📚 Study</span>
+            <span class="pill" id="studyPill">Ready</span>
+          </div>
+          <div class="time" id="studyTime">25:00</div>
+          <div class="side-hint">Click to start</div>
+        </button>
+
+        <button class="side rest" id="restPanel" type="button">
+          <div class="side-top">
+            <span class="side-label">☕ Rest</span>
+            <span class="pill" id="restPill">Ready</span>
+          </div>
+          <div class="time" id="restTime">05:00</div>
+          <div class="side-hint">Click to start</div>
+        </button>
+      </section>
+
+      <section class="controls">
+        <button class="btn primary" id="pauseResumeBtn" type="button">Pause</button>
+        <button class="btn" id="resetBtn" type="button">Reset</button>
+      </section>
+
+      <section class="settings-panel" id="settingsPanel" hidden>
+        <div class="settings-head">
+          <h2>Settings</h2>
+          <span class="card-note">Saved on this device</span>
+        </div>
+
+        <div class="settings-grid">
+          <label class="field">
+            <span>Study minutes</span>
+            <input id="studyMinutes" type="number" min="0" max="999" step="1" inputmode="numeric" />
+          </label>
+          <label class="field">
+            <span>Study seconds</span>
+            <input id="studySeconds" type="number" min="0" max="59" step="1" inputmode="numeric" />
+          </label>
+          <label class="field">
+            <span>Rest minutes</span>
+            <input id="restMinutes" type="number" min="0" max="999" step="1" inputmode="numeric" />
+          </label>
+          <label class="field">
+            <span>Rest seconds</span>
+            <input id="restSeconds" type="number" min="0" max="59" step="1" inputmode="numeric" />
+          </label>
+        </div>
+
+        <div class="toggles">
+          <label class="toggle">
+            <input id="soundEnabled" type="checkbox" />
+            <span>Switch clicks &amp; completion chime</span>
+          </label>
+          <label class="toggle">
+            <input id="tickEnabled" type="checkbox" />
+            <span>Soft ticking while running</span>
+          </label>
+          <label class="toggle">
+            <input id="notificationsEnabled" type="checkbox" />
+            <span>Desktop notifications at zero</span>
+          </label>
+          <label class="toggle">
+            <input id="keepAwakeEnabled" type="checkbox" />
+            <span>Keep screen awake while open</span>
+          </label>
+        </div>
+
+        <div class="slider-row">
+          <span>Volume</span>
+          <input id="volumeRange" type="range" min="0" max="100" step="5" />
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn" id="closeSettingsBtn" type="button">Close</button>
+          <button class="btn primary" id="saveSettingsBtn" type="button">Save settings</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" hidden></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

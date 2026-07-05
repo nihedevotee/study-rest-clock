@@ -1,0 +1,16 @@
+{
+  "name": "Study Rest Clock",
+  "short_name": "Study/Rest",
+  "description": "A minimal chess-clock timer for alternating Study and Rest sessions.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0d0c",
+  "theme_color": "#0b0d0c",
+  "orientation": "any",
+  "icons": [
+    { "src": "assets/icon16.png", "sizes": "16x16", "type": "image/png" },
+    { "src": "assets/icon48.png", "sizes": "48x48", "type": "image/png" },
+    { "src": "assets/icon128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

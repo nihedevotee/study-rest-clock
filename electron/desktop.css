@@ -1,0 +1,24 @@
+/*
+  Desktop-only style overrides layered on top of ../web/styles.css.
+  Kept intentionally tiny: almost all visual language is shared.
+*/
+
+html,
+body.is-desktop {
+  background: transparent;
+}
+
+body.is-desktop .app-shell {
+  height: 100vh;
+  padding: 8px;
+  gap: 6px;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+/* Give the pin button a visibly "on" state once always-on-top is enabled */
+#pinBtn.is-on {
+  color: var(--rest);
+  border-color: color-mix(in srgb, var(--rest) 45%, var(--border));
+}
