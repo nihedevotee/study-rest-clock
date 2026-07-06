@@ -56,6 +56,7 @@ const elements = {
   volumeRange: document.getElementById("volumeRange"),
   saveSettingsBtn: document.getElementById("saveSettingsBtn"),
   requestNotifyBtn: document.getElementById("requestNotifyBtn"),
+  popoutBtn: document.getElementById("popoutBtn"),
   toast: document.getElementById("toast"),
 };
 
@@ -281,6 +282,52 @@ function releaseWakeLock() {
   }
 }
 
+// -------------------------------- pop-out (Picture-in-Picture) -----------------
+
+async function popOut() {
+  if (!("documentPictureInPicture" in window)) {
+    showToast("Pop-out mode needs Chrome or Edge");
+    return;
+  }
+
+  const clockEl = document.getElementById("clockContainer");
+
+  // Remember exactly where clockEl came from so we can put it back later,
+  // even if other DOM siblings shift around while it's floating.
+  const anchor = document.createComment("clock-anchor");
+  clockEl.after(anchor);
+
+  const pipWindow = await documentPictureInPicture.requestWindow({
+    width: 320,
+    height: 220,
+  });
+
+  pipWindow.document.body.classList.add("is-web");
+
+  // Copy stylesheets into the floating window (it doesn't inherit the parent's CSS).
+  [...document.styleSheets].forEach((sheet) => {
+    try {
+      const css = [...sheet.cssRules].map((r) => r.cssText).join("\n");
+      const style = document.createElement("style");
+      style.textContent = css;
+      pipWindow.document.head.appendChild(style);
+    } catch (e) {
+      // cross-origin stylesheets throw on .cssRules access — safe to skip
+    }
+  });
+
+  pipWindow.document.body.appendChild(clockEl);
+
+  pipWindow.addEventListener(
+    "pagehide",
+    () => {
+      anchor.after(clockEl);
+      anchor.remove();
+    },
+    { once: true }
+  );
+}
+
 // -------------------------------- wiring ---------------------------------------
 
 function bindEvents() {
@@ -291,6 +338,7 @@ function bindEvents() {
   elements.saveSettingsBtn.addEventListener("click", handleSaveSettings);
   elements.requestNotifyBtn.addEventListener("click", requestNotificationPermission);
   elements.fullscreenBtn.addEventListener("click", toggleFullscreen);
+  elements.popoutBtn.addEventListener("click", popOut);
 
   elements.settingsToggleBtn.addEventListener("click", () => {
     elements.settingsPanel.hidden = !elements.settingsPanel.hidden;

@@ -12,19 +12,21 @@
     <title>Study Rest Clock</title>
   </head>
   <body class="is-web">
-    <main class="app-shell">
+    <main class="app-shell" id="appRoot">
       <header class="topbar">
         <div class="brand" id="brand">
           <span class="dot"></span>
           <span id="statusText">Study Rest Clock</span>
         </div>
         <div class="topbar-actions">
+          <button class="icon-btn" id="popoutBtn" type="button" title="Pop out">📌</button>
           <button class="icon-btn" id="requestNotifyBtn" type="button" title="Enable notifications">🔔</button>
           <button class="icon-btn" id="fullscreenBtn" type="button" title="Fullscreen">⛶</button>
           <button class="icon-btn" id="settingsToggleBtn" type="button" title="Settings">⚙</button>
         </div>
       </header>
 
+      <div id="clockContainer">
       <section class="board" aria-label="Timer panels">
         <button class="side study" id="studyPanel" type="button">
           <div class="side-top">
@@ -49,6 +51,7 @@
         <button class="btn primary" id="pauseResumeBtn" type="button">Pause</button>
         <button class="btn" id="resetBtn" type="button">Reset</button>
       </section>
+      </div>
 
       <section class="settings-panel" id="settingsPanel" hidden>
         <div class="settings-head">
