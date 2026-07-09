@@ -1,7 +1,7 @@
 // Service worker: caches the app shell so it keeps working offline / when
 // reopened without a network connection. Bump CACHE_NAME whenever any
 // cached file's content changes, so old clients pick up the new version.
-const CACHE_NAME = "study-rest-clock-v2";
+const CACHE_NAME = "study-rest-clock-v3";
 const ASSETS = [
   "./",
   "./index.html",
