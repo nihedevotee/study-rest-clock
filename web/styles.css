@@ -519,3 +519,19 @@ body.is-web .app-shell {
     transition: none !important;
   }
 }
+
+/* ---------------------------------------------------------------------- */
+/* Pop-out (Document Picture-in-Picture) window                           */
+/* ---------------------------------------------------------------------- */
+
+body.is-pip {
+  overflow: hidden;
+}
+
+body.is-pip #clockContainer {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 8px;
+  padding: 8px;
+}

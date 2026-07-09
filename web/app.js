@@ -286,11 +286,19 @@ function releaseWakeLock() {
 
 async function popOut() {
   if (!("documentPictureInPicture" in window)) {
-    showToast("Pop-out mode needs Chrome or Edge");
+    showToast("Pop-out needs Chrome, Edge, or Firefox — try one of those browsers");
+    return;
+  }
+
+  // Already popped out? Treat a second click as "bring it back" instead of
+  // trying (and failing) to pop out a clock that's no longer in this page.
+  if (documentPictureInPicture.window) {
+    documentPictureInPicture.window.close();
     return;
   }
 
   const clockEl = document.getElementById("clockContainer");
+  const rect = clockEl.getBoundingClientRect();
 
   // Remember exactly where clockEl came from so we can put it back later,
   // even if other DOM siblings shift around while it's floating.
@@ -298,11 +306,11 @@ async function popOut() {
   clockEl.after(anchor);
 
   const pipWindow = await documentPictureInPicture.requestWindow({
-    width: 320,
-    height: 220,
+    width: Math.max(280, Math.round(rect.width)),
+    height: Math.max(200, Math.round(rect.height)),
   });
 
-  pipWindow.document.body.classList.add("is-web");
+  pipWindow.document.body.classList.add("is-web", "is-pip");
 
   // Copy stylesheets into the floating window (it doesn't inherit the parent's CSS).
   [...document.styleSheets].forEach((sheet) => {
@@ -317,12 +325,16 @@ async function popOut() {
   });
 
   pipWindow.document.body.appendChild(clockEl);
+  elements.popoutBtn.classList.add("is-on");
+  elements.popoutBtn.title = "Bring the clock back to this tab";
 
   pipWindow.addEventListener(
     "pagehide",
     () => {
       anchor.after(clockEl);
       anchor.remove();
+      elements.popoutBtn.classList.remove("is-on");
+      elements.popoutBtn.title = "Pop out";
     },
     { once: true }
   );
