@@ -29,6 +29,22 @@
 
   --danger: #d97757;
 
+  /* Footer / About — a separate, natural palette that sits alongside the
+     study/rest teal-orange system without competing with it. Every color
+     below is used for exactly one purpose (see .site-footer rules). */
+  --footer-bg: #12160f;
+  --footer-bg-2: #171c13;
+  --forest: #2e4034;
+  --sage: #8ba888;
+  --sage-soft: rgba(139, 168, 136, 0.14);
+  --sand: #cbb08a;
+  --sand-soft: rgba(203, 176, 138, 0.16);
+  --olive: #6b6f4c;
+  --cream: #f2ece0;
+  --footer-text: #dfe3da;
+  --footer-muted: #8d968a;
+  --footer-border: rgba(242, 236, 224, 0.09);
+
   --radius-lg: 22px;
   --radius-md: 14px;
   --radius-sm: 10px;
@@ -534,4 +550,199 @@ body.is-pip #clockContainer {
   grid-template-rows: 1fr auto;
   gap: 8px;
   padding: 8px;
+}
+/* ---------------------------------------------------------------------- */
+/* Site footer / About                                                     */
+/* ---------------------------------------------------------------------- */
+
+.site-footer {
+  background: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  color: var(--footer-text);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+body.is-web .site-footer {
+  margin-top: 32px;
+}
+
+.footer-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 36px 20px 28px;
+  display: grid;
+  gap: 18px;
+}
+
+.footer-about {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.footer-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--forest);
+  border: 1px solid var(--footer-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--sand);
+}
+
+.footer-details {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.footer-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.footer-role {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--sage);
+  font-weight: 600;
+}
+
+.footer-bio {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--footer-muted);
+  max-width: 52ch;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--footer-border);
+  background: var(--footer-bg-2);
+  color: var(--footer-text);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms ease;
+}
+
+.footer-github svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--sand);
+  transition: fill 160ms ease;
+}
+
+.footer-github:hover {
+  background: var(--sage-soft);
+  border-color: color-mix(in srgb, var(--sage) 45%, var(--footer-border));
+  color: var(--cream);
+}
+
+.footer-github:hover svg {
+  fill: var(--sage);
+}
+
+.footer-github:active {
+  transform: scale(0.97);
+}
+
+.footer-github:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--sand) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.footer-rule {
+  height: 1px;
+  background: var(--footer-border);
+  border: none;
+  margin: 2px 0;
+}
+
+.footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.68rem;
+  color: var(--footer-muted);
+}
+
+.footer-meta .dot-sep {
+  color: var(--olive);
+  margin: 0 6px;
+}
+
+@media (max-width: 380px) {
+  .footer-about {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Quick controls (travel with the pop-out — see #clockContainer)          */
+/* ---------------------------------------------------------------------- */
+
+.quick-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quick-controls .icon-btn {
+  flex-shrink: 0;
+}
+
+.quick-controls .icon-btn.is-muted {
+  color: var(--muted-2);
+  border-color: var(--border);
+}
+
+.quick-opacity {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.quick-opacity span {
+  font-size: 0.66rem;
+  color: var(--muted-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.quick-opacity input[type="range"] {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--sand, var(--study));
+}
+
+body.is-pip .quick-controls {
+  padding: 0 2px;
 }
